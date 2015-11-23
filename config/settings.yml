@@ -1,0 +1,4 @@
+plugins:
+  featured_enabled:
+    default: true
+    client: true

@@ -1,0 +1,12 @@
+en:
+  js:
+    composer:
+      featured_button_title: "Choose Featured Image"
+    featured:
+      composer_button_text: "Choose Featured Image"
+      modal_title: "Pick Featured Image"
+      none: "(none)"
+      categories: "Categories"
+      tags: "Tags"
+      insert: "Insert Selected Images"
+      alternate_text: "Tags: {{tags}}\r\nCaption: {{caption}}"
