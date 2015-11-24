@@ -18,9 +18,9 @@ after_initialize do
   end
 
 # use routes?
-  FeaturedImage::Engine.routes.draw do
-    put '/:topic_id/featured_image' => 'feautred_image#update'
-end
+#   FeaturedImage::Engine.routes.draw do
+#     put '/:topic_id/featured_image' => 'feautred_image#update'
+# end
 
   require_dependency 'application_controller'
 
@@ -37,6 +37,7 @@ end
 
   on(:topic_created) do |topic, params, _user|
     topic.custom_fields[FEATURED_FIELD_NAME] = params[:featured_image]
+    topic.image_url = params[:featured_image]
     topic.save
   end
 
