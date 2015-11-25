@@ -1,5 +1,5 @@
 <div class="modal-body featured-modal" style="overflow: visible">
-  <div class="radios">
+  <!-- <div class="radios">
     <input type="radio" id="local" value="local" name="upload" {{action "useLocal"}}>
     <label class="radio" for="local">{{i18n 'upload_selector.from_my_computer'}}</label>
     {{#if local}}
@@ -8,7 +8,7 @@
         <span class="description">{{tip}}</span>
       </div>
     {{/if}}
-  </div>
+  </div> -->
   <div class="radios">
     <input type="radio" id="remote" value="remote" name="upload" {{action "useRemote"}}>
     <label class="radio" for="remote">{{i18n 'upload_selector.from_the_web'}}</label>
@@ -22,7 +22,7 @@
   {{#if showMore}}
     <div class="radios">
       <div class="inputs">
-        {{input value=imageLink laceholder="http://example.com"}}
+        {{input value=imageLink placeholder="http://example.com"}}
         <span class="description">{{i18n 'upload_selector.image_link'}}</span>
       </div>
     </div>

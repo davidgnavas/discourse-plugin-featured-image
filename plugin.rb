@@ -1,6 +1,6 @@
 # name: discourse-plugin-featured-image
 # about: Add Featured Image Support
-# version: 0.1
+# version: 0.2
 # authors: Emanuele Tonello
 # url: https://github.com/
 
