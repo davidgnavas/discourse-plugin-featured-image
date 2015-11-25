@@ -6,6 +6,8 @@
 
 enabled_site_setting :featured_enabled
 
+register_asset 'stylesheets/featured.scss'
+
 after_initialize do
   FEATURED_FIELD_NAME = 'featured_image'
 
