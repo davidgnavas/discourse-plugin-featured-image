@@ -39,8 +39,18 @@ after_initialize do
 
 # populating field on topic creation
   on(:topic_created) do |topic, params, _user|
-    topic.custom_fields[FEATURED_FIELD_NAME] = params[:featured_image]
-    topic.image_url = params[:featured_image]
+    if params[:featured_image].present?
+      topic.custom_fields[FEATURED_FIELD_NAME] = params[:featured_image]
+      topic.image_url = params[:featured_image]
+    else
+      str=params["image_sizes"].keys[0]
+      match = str.match /[a-z1-9]+\/.*/
+      featured = match[0]
+      binding.pry
+      topic.custom_fields[FEATURED_FIELD_NAME] = "/" + featured
+      topic.image_url = "/" + featured
+    end
+    binding.pry
     topic.save
   end
 
