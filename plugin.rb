@@ -39,17 +39,19 @@ after_initialize do
     tc.topic.save
   end
 
+# I register a listener for the imminent upload
   MessageBus.subscribe("/uploads/composer") do |upload|
    @featured=upload.data["url"]
   end
 
+# handling the update of the featured image with the uplaod from device
+# TODO solve issue about discerning normal upload from featured image upload
   on(:validate_post) do |post|
-    binding.pry
-    if !@featured.blank?
-      binding.pry
-      post.topic.custom_fields[FEATURED_FIELD_NAME] = @featured
-      post.topic.image_url = @featured
-      post.topic.save
+    topic = post.topic
+    if !@featured.blank? && topic.custom_fields[FEATURED_FIELD_NAME] != @featured
+      topic.custom_fields[FEATURED_FIELD_NAME] = @featured
+      topic.image_url = @featured
+      topic.save
     end
   end
 
