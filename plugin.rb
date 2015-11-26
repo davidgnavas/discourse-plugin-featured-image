@@ -11,6 +11,8 @@ register_asset 'stylesheets/featured.scss'
 after_initialize do
   FEATURED_FIELD_NAME = 'featured_image'
 
+  @featured = ""
+
 # to handle the edge case of this post processor class that even if apparently gets called only
 # on the RSpec suite, it will override the selected featured image
   require_dependency 'cooked_post_processor'
@@ -30,11 +32,25 @@ after_initialize do
     result = custom_fields[FEATURED_FIELD_NAME]
   end
 
-# handling image update
+# handling image update from web
   PostRevisor.track_topic_field(:featured_image) do |tc, featured_image|
     tc.topic.custom_fields.update(FEATURED_FIELD_NAME => featured_image)
     tc.topic.image_url = featured_image
     tc.topic.save
+  end
+
+  MessageBus.subscribe("/uploads/composer") do |upload|
+   @featured=upload.data["url"]
+  end
+
+  on(:validate_post) do |post|
+    binding.pry
+    if !@featured.blank?
+      binding.pry
+      post.topic.custom_fields[FEATURED_FIELD_NAME] = @featured
+      post.topic.image_url = @featured
+      post.topic.save
+    end
   end
 
 # populating field on topic creation
