@@ -8,7 +8,14 @@ export default {
 	initialize(container) {
 		Discourse.Composer.serializeOnCreate('featured_image');
  		Discourse.Composer.serializeToTopic('featured_image', 'topic.featured_image');
+		Discourse.Composer.serializeOnCreate('isfeatured');
+ 		Discourse.Composer.serializeToTopic('isfeatured', 'topic.isfeatured');
 		const siteSettings = container.lookup('site-settings:main');
+		const messageBus = container.lookup("message-bus:main");
+
+		messageBus.subscribe("/uploads/composer", data => {
+
+		});
 
 		if (siteSettings.featured_enabled) {
 			if (typeof Discourse.ComposerEditorComponent === "undefined") {

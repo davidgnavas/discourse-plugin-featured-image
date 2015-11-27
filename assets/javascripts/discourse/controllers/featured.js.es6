@@ -11,10 +11,14 @@ export default UploadSelector.extend({
         $('.wmd-controls').fileupload('add', {
           fileInput: $('#filename-input')
         });
+        this.get("composer_model").set("isfeatured", true);
+        this.set("isfeatured", true);
+        this.get("composer_model").update({
+          isfeatured: true
+        });
       } else {
         const imageUrl = this.get('imageUrl') || '';
         const imageLink = this.get('imageLink') || '';
-        const toolbarEvent = this.get('toolbarEvent');
 
         this.get("composer_model").set("featured_image", imageUrl);
 

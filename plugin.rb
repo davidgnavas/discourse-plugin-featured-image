@@ -1,6 +1,6 @@
 # name: discourse-plugin-featured-image
 # about: Add Featured Image to the Topic
-# version: 0.4
+# version: 0.6
 # authors: Emanuele Tonello
 # url: https://github.com/startsat60/discourse-plugin-featured-image
 
@@ -10,7 +10,9 @@ register_asset 'stylesheets/featured.scss'
 
 after_initialize do
   FEATURED_FIELD_NAME = 'featured_image'
+  IS_FEATURED = 'isfeatured'
 
+  @isfeatured = false
   @featured = ""
 
 # to handle the edge case of this post processor class that even if apparently gets called only
@@ -32,11 +34,19 @@ after_initialize do
     result = custom_fields[FEATURED_FIELD_NAME]
   end
 
+  add_to_class :topic, :isfeatured do
+    result = custom_fields[IS_FEATURED]
+  end
+
 # handling image update from web
   PostRevisor.track_topic_field(:featured_image) do |tc, featured_image|
     tc.topic.custom_fields.update(FEATURED_FIELD_NAME => featured_image)
     tc.topic.image_url = featured_image
     tc.topic.save
+  end
+
+  PostRevisor.track_topic_field(:isfeatured) do |tc, isfeatured|
+    @isfeatured=isfeatured
   end
 
 # I register a listener for the imminent upload
@@ -45,30 +55,30 @@ after_initialize do
   end
 
 # handling the update of the featured image with the uplaod from device
-# TODO solve issue about discerning normal upload from featured image upload
   on(:validate_post) do |post|
-    topic = post.topic
-    if !@featured.blank? && topic.custom_fields[FEATURED_FIELD_NAME] != @featured
-      topic.custom_fields[FEATURED_FIELD_NAME] = @featured
-      topic.image_url = @featured
-      topic.save
+    if !@featured.blank? && post.topic.present?
+      topic = post.topic
+      if topic.custom_fields[FEATURED_FIELD_NAME] != @featured && @isfeatured
+        topic.custom_fields[FEATURED_FIELD_NAME] = @featured
+        topic.image_url = @featured
+        topic.save
+      end
     end
   end
 
 # populating field on topic creation
   on(:topic_created) do |topic, params, _user|
+    puts params[IS_FEATURED]
     if params[:featured_image].present?
       topic.custom_fields[FEATURED_FIELD_NAME] = params[:featured_image]
       topic.image_url = params[:featured_image]
-    else
-      str=params["image_sizes"].keys[0]
+    elsif params[IS_FEATURED].present?
+      str = params["image_sizes"].keys[0]
       match = str.match /[a-z1-9]+\/.*/
       featured = match[0]
-      binding.pry
       topic.custom_fields[FEATURED_FIELD_NAME] = "/" + featured
       topic.image_url = "/" + featured
     end
-    binding.pry
     topic.save
   end
 
