@@ -8,6 +8,8 @@ enabled_site_setting :featured_enabled
 
 register_asset 'stylesheets/featured.scss'
 
+register_asset "stylesheets/featured_mobile.scss", :mobile
+
 after_initialize do
   FEATURED_FIELD_NAME = 'featured_image'
   IS_FEATURED = 'isfeatured'
