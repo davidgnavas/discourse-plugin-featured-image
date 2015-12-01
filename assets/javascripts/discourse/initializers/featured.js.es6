@@ -2,14 +2,15 @@ import showModal from 'discourse/lib/show-modal';
 import ApplicationRoute from 'discourse/routes/application';
 import ComposerView from 'discourse/views/composer';
 import { onToolbarCreate } from 'discourse/components/d-editor';
+import Composer from 'discourse/models/composer';
 
 export default {
 	name: 'featured',
 	initialize(container) {
-		Discourse.Composer.serializeOnCreate('featured_image');
- 		Discourse.Composer.serializeToTopic('featured_image', 'topic.featured_image');
-		Discourse.Composer.serializeOnCreate('isfeatured');
- 		Discourse.Composer.serializeToTopic('isfeatured', 'topic.isfeatured');
+		Composer.serializeOnCreate('featured_image');
+ 		Composer.serializeToTopic('featured_image', 'topic.featured_image');
+		Composer.serializeOnCreate('isfeatured');
+ 		Composer.serializeToTopic('isfeatured', 'topic.isfeatured');
 		const siteSettings = container.lookup('site-settings:main');
 		const messageBus = container.lookup("message-bus:main");
 
